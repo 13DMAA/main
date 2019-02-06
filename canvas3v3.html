@@ -1,0 +1,228 @@
+
+<html>
+  <head>
+  <link rel ="stylesheet" href="css.css">
+  	<script>
+      var startScript = true;
+      var xTouchStart, xTouchEnd, yTouchStart, yTouchEnd;
+      /////////////////////////////
+  function clear () {
+         	ctx.clearRect (0, 0, canvas.width, canvas.height);
+         }
+         //////////////////////////
+  function randomXY(min, max)
+{
+  return Math.random() * (max - min) + min;
+}
+      //////////////////////////////
+  
+  	window.addEventListener('load', function(){
+    document.body.addEventListener('touchstart', function showPalecTouch(e){
+    document.getElementById("palecTouchX").innerHTML = e.changedTouches[0].pageX;
+    xTouchStart = e.changedTouches[0].pageX;
+    document.getElementById("palecTouchY").innerHTML = e.changedTouches[0].pageY;
+    yTouchStart = e.changedTouches[0].pageY;
+    }, false)
+}, false)
+      /////////////////////////////////
+window.addEventListener('load', function(){
+    document.body.addEventListener('touchend', function showPalecTouchEnd(e){
+    document.getElementById("palecTouchEndX").innerHTML = e.changedTouches[0].pageX;
+    xTouchEnd = e.changedTouches[0].pageX;
+    document.getElementById("palecTouchEndY").innerHTML = e.changedTouches[0].pageY;
+    yTouchEnd = e.changedTouches[0].pageY;
+    }, false)
+}, false)
+      //////////////////////////////////
+      function showCoords(evt){ 
+      alert( "clientX value: " + evt.clientX
+      + "\n" + "clientY value: " + evt.clientY
+      + "\n" ); }
+      //////////////////////////////////
+  	function showVar(id, variable) {
+  	document.getElementById(id).innerHTML = variable;
+      }
+      /////////////////////////////////
+       function draw() {
+       	
+           /////////////////////////////
+           if ((xTouchStart - xTouchEnd) < -canvas.width/10
+          && (yTouchStart - yTouchEnd) > -(canvas.height/10) 
+          && (yTouchStart - yTouchEnd) < canvas.height/10) {
+          
+          tank.driveRight = true;
+          tank.driveLeft = false;
+          tank.driveTop = false;
+          tank.driveBottom = false;
+          }
+          /////////////////////
+          if ((xTouchStart  - xTouchEnd) > canvas.width/10
+          && (yTouchStart - yTouchEnd) > -(canvas.height/10) 
+          && (yTouchStart - yTouchEnd) < canvas.height/10) {
+         
+          tank.driveRight = false;
+          tank.driveLeft = true;
+          tank.driveTop = false;
+          tank.driveBottom = false;
+          }
+             //////////////////////////
+          if ((yTouchStart - yTouchEnd) < -(canvas.height/10)
+          && (xTouchStart - xTouchEnd) > -(canvas.width/10)
+          && (xTouchStart - xTouchEnd) < canvas.width/10) {
+          tank.driveRight = false;
+          tank.driveLeft = false;
+          tank.driveTop = false;
+          tank.driveBottom = true;
+          }	
+          ////////////////////////////
+          if ((yTouchStart - yTouchEnd) > canvas.height/10
+          && (xTouchStart - xTouchEnd) > -(canvas.width/10)
+          && (xTouchStart - xTouchEnd) < canvas.width/10) {
+          tank.driveRight = false;
+          tank.driveLeft = false;
+          tank.driveTop = true;
+          tank.driveBottom = false;
+          }	
+             /////////////////////////
+             if (tank.x >= (canvas.width - tank.corpus_w - tank.dulo_w)) {
+             	tank.right = false;
+                 }
+             if (tank.x < (canvas.width - tank.corpus_w - tank.dulo_w)) {
+                 tank.right = true;
+                 }
+                 /////////////////////////
+             if (tank.x <= tank.dulo_w) {
+                 tank.left = false;
+                 }
+             if (tank.x > tank.dulo_w ) {
+                 tank.left = true;
+                 }
+                 ////////////////////////
+             if (tank.y >= (canvas.height - tank.corpus_h - tank.dulo_w)) {
+             	tank.bottom = false;
+                 }
+             if (tank.y < (canvas.height -tank.corpus_h - tank.dulo_w)) {
+                 tank.bottom = true;
+                 }
+                //////////////////////// 
+             if (tank.y <= tank.dulo_w) {
+             	tank.top = false;
+                 }
+             if (tank.y > tank.dulo_w) {
+                 tank.top = true;
+                 }
+             //////////////////////
+             if (startScript) {
+             tank.x = Math.round (randomXY(tank.dulo_w, canvas.width - tank.dulo_w));
+             tank.y = Math.round (randomXY(tank.dulo_w, canvas.width - tank.dulo_w));
+             clear();
+             ctx.fillStyle = tank.color;
+             ctx.fillRect (tank.x, tank.y, tank.corpus_w, tank.corpus_h);
+             ctx.fillRect (tank.x + 50, tank.y + 20, tank.dulo_w, tank.dulo_h);
+             startScript = false;
+             }
+             ////////////////////////
+             if (false) {
+             }
+             ////////////////////////
+             if (false) {
+             //if () {
+             clear();
+             ctx.fillStyle = snaryad.color;
+             ctx.fillRect (snaryad.x, snaryad.y, 10, 10);
+             }
+             ///////////////////////
+             if (tank.right && tank.driveRight) { //движение вправо
+         	clear();
+             ctx.fillStyle = tank.color;
+             ctx.fillRect (tank.x, tank.y, tank.corpus_w, tank.corpus_h);
+             ctx.fillRect (tank.x + 50, tank.y + 20, tank.dulo_w, tank.dulo_h);
+             tank.dulo_compas = 3;
+             tank.x += 1;
+             }
+             ////////////////////////
+             if (tank.left && tank.driveLeft) { //движение влево
+             clear();
+             ctx.fillStyle = tank.color;
+             ctx.fillRect (tank.x, tank.y, tank.corpus_w, tank.corpus_h);
+             ctx.fillRect (tank.x - 30, tank.y + 20, tank.dulo_w, tank.dulo_h);
+             tank.dulo_compas = 1;
+             tank.x -= 1;	
+             }
+             /////////////////////////
+             if (tank.bottom && tank.driveBottom) { //движение вниз
+             clear();
+             ctx.fillStyle = tank.color;
+             ctx.fillRect (tank.x, tank.y, tank.corpus_h, tank.corpus_w);
+             ctx.fillRect (tank.x + 20, tank.y + 50, tank.dulo_h, tank.dulo_w);
+             tank.dulo_compas = 4;
+             tank.y += 1;
+             }
+             //////////////////////////
+             if (tank.top && tank.driveTop) { //движение вверх
+             clear();
+             ctx.fillStyle = tank.color;
+             ctx.fillRect (tank.x, tank.y, tank.corpus_h, tank.corpus_w);
+             ctx.fillRect (tank.x + 20, tank.y - 30, tank.dulo_h, tank.dulo_w);
+             tank.dulo_compas = 2;
+             tank.y -= 1;
+             }
+             ////////////////////////
+             showVar ("divTankX", tank.x);
+             showVar ("divTankY", tank.y);
+             requestAnimation = requestAnimationFrame(draw);
+         	}
+         
+      </script>
+  </head>
+  <body >
+    <canvas id = "canvas" width = "800" height = "1000" 
+onclick="showPalecTouch(event)"></canvas>
+         <script>
+         var ctx = canvas.getContext('2d'), 
+         requestAnimation;
+         
+         var tank =
+         {
+         x: 0,
+         y: 0,
+         corpus_w: 50,
+         corpus_h: 50,
+         dulo_w: 30,
+         dulo_h: 10,
+         dulo_compas: 0,
+         color: "green",
+         right: false,
+         left: false,
+         top: false,
+         bottom: false,
+         driveRight: false,
+         driveLeft: false,
+         driveTop: false,
+         driveBottom: false
+         }
+         var snaryad = {
+         x: 0,
+         y: 0,
+         color: "red",
+         right: false,
+         left: false,
+         top: false,
+         bottom: false,
+         driveRight: false,
+         driveLeft: false,
+         driveTop: false,
+         driveBottom: false	
+         }
+         
+         
+        
+        requestAnimationFrame(draw);
+        //alert (xTouchStart - xTouchEnd);
+             
+    	</script>
+        <div><a>Coordinatyi tanka&nbsp;&nbsp;&nbsp;&nbsp;X:</a><a id="divTankX"></a><a>&nbsp;&nbsp;&nbsp;&nbsp;Y:</a><a id ="divTankY"></a></div>
+        <div><a>Palec najali&nbsp;&nbsp;&nbsp;&nbsp;X:</a><a id= "palecTouchX"></a><a>&nbsp;&nbsp;&nbsp;&nbsp;Y:</a><a id = "palecTouchY"> </a></div>
+        <div><a>Palec otpustili&nbsp;&nbsp;&nbsp;&nbsp;X:</a><a id= "palecTouchEndX"></a><a>&nbsp;&nbsp;&nbsp;&nbsp;Y:</a><a id = "palecTouchEndY"> </a></div>
+  </body>
+</html>
